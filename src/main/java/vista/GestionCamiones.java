@@ -2,6 +2,7 @@ package vista;
 
 import modelo.Camion;
 import dao.CamionDAO;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
 public class GestionCamiones extends javax.swing.JFrame {
@@ -25,28 +26,37 @@ public class GestionCamiones extends javax.swing.JFrame {
 }
     
     private void cargarTabla() {
-        dao.CamionDAO dao = new dao.CamionDAO();
-        java.util.List<modelo.Camion> lista = dao.listarCamiones();
+            dao.CamionDAO dao = new dao.CamionDAO();
+            java.util.List<modelo.Camion> lista = dao.listarCamiones();
 
-        javax.swing.table.DefaultTableModel modelo = new javax.swing.table.DefaultTableModel();
-        modelo.addColumn("Patente");
-        modelo.addColumn("Marca");
-        modelo.addColumn("Modelo");
-        modelo.addColumn("Año");
-        modelo.addColumn("Kilometraje");
-
-        for (modelo.Camion c : lista) {
-            Object[] fila = {
-                c.getPatente(),
-                c.getMarca(),
-                c.getModelo(),
-                c.getAnio(),
-                c.getKilometrajeActual()
+            javax.swing.table.DefaultTableModel modelo = new javax.swing.table.DefaultTableModel() {
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    return false;
+                }
             };
-            modelo.addRow(fila);
+
+            modelo.addColumn("Patente");
+            modelo.addColumn("Marca");
+            modelo.addColumn("Modelo");
+            modelo.addColumn("Año");
+            modelo.addColumn("Kilometraje");
+
+            for (modelo.Camion c : lista) {
+                Object[] fila = {
+                    c.getPatente(),
+                    c.getMarca(),
+                    c.getModelo(),
+                    c.getAnio(),
+                    c.getKilometrajeActual()
+                };
+                modelo.addRow(fila);
+            }
+
+            jTableCamiones.setModel(modelo);
+
+            modelo.fireTableDataChanged(); 
         }
-        jTableCamiones.setModel(modelo);
-    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -69,6 +79,7 @@ public class GestionCamiones extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         btnEliminar = new javax.swing.JButton();
         btnVolver = new javax.swing.JButton();
+        btnModificar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -195,6 +206,13 @@ public class GestionCamiones extends javax.swing.JFrame {
             }
         });
 
+        btnModificar.setText("Actualizar");
+        btnModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -210,7 +228,9 @@ public class GestionCamiones extends javax.swing.JFrame {
                 .addGap(21, 21, 21)
                 .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnModificar, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(35, 35, 35)
+                .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(33, 33, 33))
         );
         layout.setVerticalGroup(
@@ -222,7 +242,9 @@ public class GestionCamiones extends javax.swing.JFrame {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnEliminar)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnEliminar)
+                        .addComponent(btnModificar))
                     .addComponent(btnVolver))
                 .addGap(61, 61, 61))
         );
@@ -237,38 +259,36 @@ public class GestionCamiones extends javax.swing.JFrame {
     }//GEN-LAST:event_txtModeloActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+    // 1. VALIDACIÓN: Flujo Alterno (Datos incorrectos/vacíos)
+        if (txtPatente.getText().isEmpty() || txtMarca.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Error: La patente y marca son obligatorias.", "Validación", JOptionPane.ERROR_MESSAGE);
+            return; 
+        }
+
         try {
-                if (txtPatente.getText().isEmpty() || txtAnio.getText().isEmpty() || txtKM.getText().isEmpty()) {
-                    JOptionPane.showMessageDialog(this, "Debe completar todos los campos.");
-                    return;
-                }
+            Camion c = new Camion();
+            c.setPatente(txtPatente.getText());
+            c.setMarca(txtMarca.getText());
+            c.setModelo(txtModelo.getText());
+            c.setAnio(Integer.parseInt(txtAnio.getText()));
+            c.setKilometrajeActual(Integer.parseInt(txtKM.getText()));
 
-                Camion c = new Camion();
-                c.setPatente(txtPatente.getText());
-                c.setMarca(txtMarca.getText());
-                c.setModelo(txtModelo.getText());
-                c.setAnio(Integer.parseInt(txtAnio.getText()));
-                c.setKilometrajeActual(Integer.parseInt(txtKM.getText()));
-
-                CamionDAO cDao = new CamionDAO();
-
-                if (txtPatente.isEditable() == false) {
-                    if (cDao.modificarCamion(c)) {
-                        JOptionPane.showMessageDialog(this, "¡Camión actualizado con éxito!");
-                    }
-                } else {
-                    if (cDao.insertarCamion(c)) {
-                        JOptionPane.showMessageDialog(this, "Camión registrado con éxito.");
-                    }
-                }
-
-                txtPatente.setEditable(true); // Muy importante para poder agregar otro después
+            CamionDAO dao = new CamionDAO();
+            if (dao.insertarCamion(c)) {
+                JOptionPane.showMessageDialog(this, "Camión registrado exitosamente.");
                 limpiarCampos();
                 cargarTabla();
-
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this, "Error: Ingrese solo números en Año y Kilometraje.");
             }
+
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Error: Año y Kilometraje deben ser números válidos.", "Error de Formato", JOptionPane.ERROR_MESSAGE);
+        } catch (SQLException ex) {
+            if (ex.getErrorCode() == 1062) { 
+                JOptionPane.showMessageDialog(this, "Excepción: La patente " + txtPatente.getText() + " ya está registrada.", "Camión Duplicado", JOptionPane.WARNING_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Error de base de datos: " + ex.getMessage());
+            }
+        }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
@@ -308,6 +328,30 @@ public class GestionCamiones extends javax.swing.JFrame {
                 }
     }//GEN-LAST:event_jTableCamionesMouseClicked
 
+    private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
+        try {
+                Camion c = new Camion();
+                c.setPatente(txtPatente.getText());
+                c.setMarca(txtMarca.getText());
+                c.setModelo(txtModelo.getText());
+                c.setAnio(Integer.parseInt(txtAnio.getText()));
+                c.setKilometrajeActual(Integer.parseInt(txtKM.getText()));
+
+                CamionDAO dao = new CamionDAO();
+                if (dao.modificarCamion(c)) {
+                    JOptionPane.showMessageDialog(this, "Datos del camión actualizados con éxito.");
+                    cargarTabla();
+                    limpiarCampos();
+                } else {
+                    JOptionPane.showMessageDialog(this, "No se encontró ningún camión con esa patente.");
+                }
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "Error: El año y el kilometraje deben ser números.");
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, "Error de base de datos: " + ex.getMessage());
+            }
+    }//GEN-LAST:event_btnModificarActionPerformed
+
     
     public static void main(String args[]) {
 
@@ -322,6 +366,7 @@ public class GestionCamiones extends javax.swing.JFrame {
     private javax.swing.JLabel Patente4;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnGuardar;
+    private javax.swing.JButton btnModificar;
     private javax.swing.JButton btnVolver;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;

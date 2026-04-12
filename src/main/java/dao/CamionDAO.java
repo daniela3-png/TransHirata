@@ -8,8 +8,8 @@ import modelo.Camion;
 
 public class CamionDAO {
 
-    public boolean insertarCamion(Camion c) {
-        String sql = "INSERT INTO camion (patente, marca, modelo, anio, kilometraje_actual) VALUES (?, ?, ?, ?, ?)";
+    public boolean insertarCamion(Camion c) throws SQLException {
+    String sql = "INSERT INTO camion (patente, marca, modelo, anio, kilometraje_actual) VALUES (?, ?, ?, ?, ?)";
         try (Connection con = ConexionBD.conectar();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, c.getPatente());
@@ -18,9 +18,6 @@ public class CamionDAO {
             ps.setInt(4, c.getAnio());
             ps.setInt(5, c.getKilometrajeActual());
             return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
-            System.err.println("Error al insertar camión: " + e.getMessage());
-            return false;
         }
     }
 
@@ -36,6 +33,26 @@ public class CamionDAO {
         }
     }
 
+    public boolean modificarCamion(Camion c) throws SQLException {
+        String sql = "UPDATE camion SET marca=?, modelo=?, anio=?, kilometraje_actual=? WHERE TRIM(patente)=TRIM(?)";
+
+        try (Connection con = ConexionBD.conectar();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, c.getMarca());
+            ps.setString(2, c.getModelo());
+            ps.setInt(3, c.getAnio());
+            ps.setInt(4, c.getKilometrajeActual());
+            ps.setString(5, c.getPatente());
+
+            int filasAfectadas = ps.executeUpdate();
+
+            System.out.println("Filas actualizadas en DB: " + filasAfectadas);
+
+            return filasAfectadas > 0;
+        }
+    }
+    
     public List<Camion> listarCamiones() {
         List<Camion> lista = new ArrayList<>();
         String sql = "SELECT * FROM camion";
@@ -92,20 +109,6 @@ public class CamionDAO {
         }
     }
     
-    public boolean modificarCamion(Camion c) {
-        String sql = "UPDATE camion SET marca = ?, modelo = ?, anio = ? WHERE patente = ?";
-        try (Connection con = ConexionBD.conectar();
-             PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setString(1, c.getMarca());
-            ps.setString(2, c.getModelo());
-            ps.setInt(3, c.getAnio());
-            ps.setString(4, c.getPatente());
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) {
-            System.err.println("Error al modificar camión: " + e.getMessage());
-            return false;
-        }
-    }
     
     public int obtenerKilometrajeActual(String patente) {
         String sql = "SELECT kilometraje_actual FROM camion WHERE patente = ?";

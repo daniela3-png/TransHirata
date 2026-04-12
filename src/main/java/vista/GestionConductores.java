@@ -1,7 +1,10 @@
 package vista;
 
+import dao.UsuarioDAO;
 import java.awt.HeadlessException;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
+import modelo.Usuario;
 
 public class GestionConductores extends javax.swing.JFrame {
     
@@ -59,6 +62,7 @@ public class GestionConductores extends javax.swing.JFrame {
         btnEliminar = new javax.swing.JButton();
         btnVolver = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
+        btnActualizar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -120,6 +124,13 @@ public class GestionConductores extends javax.swing.JFrame {
 
         jLabel2.setText("Administrador");
 
+        btnActualizar.setText("Actualizar");
+        btnActualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActualizarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -153,6 +164,8 @@ public class GestionConductores extends javax.swing.JFrame {
                         .addContainerGap()
                         .addComponent(btnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnActualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(30, 30, 30)
                         .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
@@ -187,7 +200,8 @@ public class GestionConductores extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnEliminar)
-                    .addComponent(btnVolver))
+                    .addComponent(btnVolver)
+                    .addComponent(btnActualizar))
                 .addGap(37, 37, 37)
                 .addComponent(jLabel2)
                 .addContainerGap())
@@ -200,44 +214,33 @@ public class GestionConductores extends javax.swing.JFrame {
     }//GEN-LAST:event_txtApellidoActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+        if (txtRut.getText().isEmpty() || txtNombre.getText().isEmpty() || txtPass.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Error: El RUT, Nombre y Contraseña son obligatorios.", "Validación", JOptionPane.ERROR_MESSAGE);
+            return; 
+        }
+
         try {
-                String rut = txtRut.getText().trim();
-                String nombre = txtNombre.getText().trim();
-                String apellido = txtApellido.getText().trim();
-                String pass = txtPass.getText().trim();
+            Usuario u = new Usuario();
+            u.setRut(txtRut.getText());
+            u.setNombre(txtNombre.getText());
+            u.setApellido(txtApellido.getText());
+            u.setContrasena(txtPass.getText());
+            u.setRol("CONDUCTOR");
 
-                if (rut.isEmpty() || nombre.isEmpty() || apellido.isEmpty()) {
-                    JOptionPane.showMessageDialog(this, "Nombre, Apellido y RUT son obligatorios.");
-                    return;
-                }
-
-                modelo.Usuario user = new modelo.Usuario();
-                user.setRut(rut);
-                user.setNombre(nombre);
-                user.setApellido(apellido);
-                user.setContrasena(pass);
-                user.setRol("CONDUCTOR");
-
-                dao.UsuarioDAO uDao = new dao.UsuarioDAO();
-
-                if (!txtRut.isEditable()) {
-                    if (uDao.modificarConductor(user)) {
-                        JOptionPane.showMessageDialog(this, "Datos del conductor actualizados.");
-                    }
-                } else {
-                    if (uDao.insertarUsuario(user)) {
-                        JOptionPane.showMessageDialog(this, "Nuevo conductor registrado.");
-                    }
-                }
-
-                txtRut.setEditable(true);
+            UsuarioDAO dao = new UsuarioDAO();
+            if (dao.insertarUsuario(u)) {
+                JOptionPane.showMessageDialog(this, "Conductor registrado exitosamente.");
                 limpiarCampos();
-                cargarTabla();
-
-            } catch (HeadlessException e) {
-                JOptionPane.showMessageDialog(this, "Error al procesar: " + e.getMessage());
+                cargarTabla(); 
             }
 
+        } catch (SQLException ex) {
+            if (ex.getErrorCode() == 1062) { 
+                JOptionPane.showMessageDialog(this, "Excepción: El RUT " + txtRut.getText() + " ya está registrado como usuario.", "Usuario Duplicado", JOptionPane.WARNING_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Error de base de datos: " + ex.getMessage());
+            }
+        }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
@@ -278,6 +281,33 @@ public class GestionConductores extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jTableConductoresMouseClicked
 
+    private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
+        try {
+                Usuario u = new Usuario();
+                u.setRut(txtRut.getText());
+                u.setNombre(txtNombre.getText());
+                u.setApellido(txtApellido.getText());
+                u.setContrasena(txtPass.getText());
+
+                UsuarioDAO dao = new UsuarioDAO();
+
+                if (dao.modificarUsuario(u)) {
+                    JOptionPane.showMessageDialog(this, "Datos del conductor actualizados con éxito.");
+
+                    cargarTabla(); 
+                    limpiarCampos();
+                } else {
+                    JOptionPane.showMessageDialog(this, "No se encontró al conductor con RUT: " + txtRut.getText());
+                }
+
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, "Error de persistencia: " + ex.getMessage());
+            } catch (HeadlessException ex) {
+                JOptionPane.showMessageDialog(this, "Error inesperado: " + ex.getMessage());
+            }
+
+    }//GEN-LAST:event_btnActualizarActionPerformed
+
     public static void main(String args[]) {
 
         java.awt.EventQueue.invokeLater(() -> new GestionConductores().setVisible(true));
@@ -288,6 +318,7 @@ public class GestionConductores extends javax.swing.JFrame {
     private javax.swing.JLabel Patente1;
     private javax.swing.JLabel Patente2;
     private javax.swing.JLabel Patente3;
+    private javax.swing.JButton btnActualizar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnVolver;

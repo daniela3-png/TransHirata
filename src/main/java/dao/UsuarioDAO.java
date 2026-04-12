@@ -39,21 +39,18 @@ public class UsuarioDAO {
         return usuario;
     }
     
-    public boolean insertarUsuario(Usuario u) {
-    String sql = "INSERT INTO usuario (rut, nombre, apellido, contrasena, rol) VALUES (?, ?, ?, ?, ?)";
-    try (Connection con = ConexionBD.conectar();
-         PreparedStatement ps = con.prepareStatement(sql)) {
-        ps.setString(1, u.getRut());
-        ps.setString(2, u.getNombre());
-        ps.setString(3, u.getApellido());
-        ps.setString(4, u.getContrasena());
-        ps.setString(5, u.getRol());
-        return ps.executeUpdate() > 0;
-    } catch (SQLException e) {
-        System.err.println("Error al insertar usuario: " + e.getMessage());
-        return false;
-    }
-}
+        public boolean insertarUsuario(Usuario u) throws SQLException {
+            String sql = "INSERT INTO usuario (rut, nombre, apellido, contrasena, rol) VALUES (?, ?, ?, ?, ?)";
+            try (Connection con = ConexionBD.conectar();
+                 PreparedStatement ps = con.prepareStatement(sql)) {
+                ps.setString(1, u.getRut());
+                ps.setString(2, u.getNombre());
+                ps.setString(3, u.getApellido());
+                ps.setString(4, u.getContrasena());
+                ps.setString(5, u.getRol());
+                return ps.executeUpdate() > 0;
+            }
+        }
 
     public List<Usuario> listarConductores() {
         List<Usuario> lista = new ArrayList<>();
@@ -107,15 +104,21 @@ public class UsuarioDAO {
         }
     }
 
-    public boolean modificarConductor(modelo.Usuario u) {
-        String sql = "UPDATE usuario SET nombre = ?, apellido = ?, contrasena = ? WHERE rut = ?";
+    public boolean modificarUsuario(Usuario u) throws SQLException {
+        String sql = "UPDATE usuario SET nombre=?, apellido=?, contrasena=? WHERE TRIM(rut)=TRIM(?)";
+
         try (Connection con = ConexionBD.conectar();
              PreparedStatement ps = con.prepareStatement(sql)) {
+
             ps.setString(1, u.getNombre());
             ps.setString(2, u.getApellido());
             ps.setString(3, u.getContrasena());
             ps.setString(4, u.getRut());
-            return ps.executeUpdate() > 0;
-        } catch (SQLException e) { return false; }
+
+            int filasAfectadas = ps.executeUpdate();
+            System.out.println("Conductores actualizados en DB: " + filasAfectadas);
+
+            return filasAfectadas > 0;
+        }
     }
 }
