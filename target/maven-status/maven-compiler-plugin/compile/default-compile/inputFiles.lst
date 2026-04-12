@@ -1,0 +1,17 @@
+C:\Users\mango\OneDrive\Documentos\NetBeansProjects\TransportesHirata\src\main\java\conexion\ConexionBD.java
+C:\Users\mango\OneDrive\Documentos\NetBeansProjects\TransportesHirata\src\main\java\dao\CamionDAO.java
+C:\Users\mango\OneDrive\Documentos\NetBeansProjects\TransportesHirata\src\main\java\dao\MantenimientoDAO.java
+C:\Users\mango\OneDrive\Documentos\NetBeansProjects\TransportesHirata\src\main\java\dao\RegistroKilometrajeDAO.java
+C:\Users\mango\OneDrive\Documentos\NetBeansProjects\TransportesHirata\src\main\java\dao\UsuarioDAO.java
+C:\Users\mango\OneDrive\Documentos\NetBeansProjects\TransportesHirata\src\main\java\modelo\Camion.java
+C:\Users\mango\OneDrive\Documentos\NetBeansProjects\TransportesHirata\src\main\java\modelo\Mantenimiento.java
+C:\Users\mango\OneDrive\Documentos\NetBeansProjects\TransportesHirata\src\main\java\modelo\RegistroKilometraje.java
+C:\Users\mango\OneDrive\Documentos\NetBeansProjects\TransportesHirata\src\main\java\modelo\SesionUsuario.java
+C:\Users\mango\OneDrive\Documentos\NetBeansProjects\TransportesHirata\src\main\java\modelo\Usuario.java
+C:\Users\mango\OneDrive\Documentos\NetBeansProjects\TransportesHirata\src\main\java\vista\GestionCamiones.java
+C:\Users\mango\OneDrive\Documentos\NetBeansProjects\TransportesHirata\src\main\java\vista\GestionConductores.java
+C:\Users\mango\OneDrive\Documentos\NetBeansProjects\TransportesHirata\src\main\java\vista\HistorialMantenciones.java
+C:\Users\mango\OneDrive\Documentos\NetBeansProjects\TransportesHirata\src\main\java\vista\Login.java
+C:\Users\mango\OneDrive\Documentos\NetBeansProjects\TransportesHirata\src\main\java\vista\MenuAdmin.java
+C:\Users\mango\OneDrive\Documentos\NetBeansProjects\TransportesHirata\src\main\java\vista\MenuMantencion.java
+C:\Users\mango\OneDrive\Documentos\NetBeansProjects\TransportesHirata\src\main\java\vista\RegistrarKilometraje.java
