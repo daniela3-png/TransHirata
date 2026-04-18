@@ -1,9 +1,6 @@
 
 package vista;
 
-import conexion.ConexionBD;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.util.List;
 import javax.swing.JOptionPane;
 public class MenuMantencion extends javax.swing.JFrame {

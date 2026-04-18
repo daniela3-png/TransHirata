@@ -1,14 +1,10 @@
 package vista;
 
 import dao.CamionDAO;
-import dao.MantenimientoDAO;
 import dao.RegistroKilometrajeDAO;
-import java.time.LocalDateTime;
 import javax.swing.JOptionPane;
 import modelo.Camion;
 import modelo.RegistroKilometraje;
-import modelo.Usuario;
-import modelo.SesionUsuario;
 import java.util.List;
 
 

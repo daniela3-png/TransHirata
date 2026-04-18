@@ -2,10 +2,6 @@ package dao;
 
 import conexion.ConexionBD;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import modelo.SesionUsuario;
-import modelo.Mantenimiento;
 
 public class MantenimientoDAO {
 
@@ -106,7 +102,6 @@ public class MantenimientoDAO {
             try (PreparedStatement ps1 = con.prepareStatement(sqlTicket);
                  PreparedStatement ps2 = con.prepareStatement(sqlCamion)) {
 
-                // 1. Cerramos el ticket
                 ps1.setString(1, detalle);
                 ps1.setInt(2, Integer.parseInt(idTicket));
                 ps1.executeUpdate();

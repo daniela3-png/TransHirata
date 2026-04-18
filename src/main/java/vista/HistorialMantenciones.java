@@ -1,9 +1,5 @@
 
 package vista;
-import java.util.List;
-import modelo.Mantenimiento;
-import dao.MantenimientoDAO;
-import javax.swing.JOptionPane;
 
 public class HistorialMantenciones extends javax.swing.JFrame {
     
