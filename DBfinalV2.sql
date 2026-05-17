@@ -103,7 +103,7 @@ CREATE TABLE `mantencion_ti` (
   KEY `id_usuario_soporte` (`id_usuario_soporte`),
   CONSTRAINT `mantencion_ti_ibfk_1` FOREIGN KEY (`id_activo`) REFERENCES `activos_ti` (`id_activo`),
   CONSTRAINT `mantencion_ti_ibfk_2` FOREIGN KEY (`id_usuario_soporte`) REFERENCES `usuario` (`id_usuario`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -112,7 +112,7 @@ CREATE TABLE `mantencion_ti` (
 
 LOCK TABLES `mantencion_ti` WRITE;
 /*!40000 ALTER TABLE `mantencion_ti` DISABLE KEYS */;
-INSERT INTO `mantencion_ti` VALUES (1,4,3,'PREVENTIVO','Mantenimiento de rutina.','Preventivo: [Limpieza] [Piezas]  | OBS: Revisión preventiva','2026-05-03 17:27:34',NULL),(2,5,3,'CORRECTIVO','Problemas con impresión','Es necesario un cambio de Tóner','2026-05-03 17:28:22',NULL),(3,8,3,'PREVENTIVO','Mantenimiento de rutina.','Preventivo: [Limpieza] [Piezas]  | OBS: Revision Preventiva','2026-05-03 17:31:54',NULL),(4,7,3,'CORRECTIVO','Equipo muy lento','Ampliación de RAM','2026-05-03 17:32:31',NULL);
+INSERT INTO `mantencion_ti` VALUES (1,4,3,'CORRECTIVO','asdasd','asdasd','2026-05-16 20:43:54','2026-05-16 20:43:00',NULL,'OPERATIVO',NULL),(2,4,3,'CORRECTIVO','sdfsf','asdads','2026-05-16 22:02:49','2026-05-16 22:02:00','2026-05-16 23:00:00','OPERATIVO',NULL),(3,4,3,'CORRECTIVO','asda','asdd','2026-05-16 22:19:04','2026-05-16 22:18:00','2026-05-16 23:00:00','OPERATIVO',NULL);
 /*!40000 ALTER TABLE `mantencion_ti` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -197,7 +197,7 @@ CREATE TABLE `repuestos` (
 
 LOCK TABLES `repuestos` WRITE;
 /*!40000 ALTER TABLE `repuestos` DISABLE KEYS */;
-INSERT INTO `repuestos` VALUES (1,'Memoria RAM 8GB DDR4','RAM',9,'NUEVO','NOTEBOOK'),(2,'Disco SSD 480GB','DISCO_DURO',5,'NUEVO','PC'),(3,'Tóner Negro HP','TONER',2,'NUEVO','IMPRESORA'),(4,'Batería Notebook Universal','RAM',10,'NUEVO','NOTEBOOK'),(5,'Cargador Notebook 19V','RAM',15,'NUEVO','NOTEBOOK'),(6,'Teclado Notebook Español','RAM',5,'NUEVO','NOTEBOOK'),(7,'Módulo RAM 8GB DDR4 Laptop','RAM',20,'NUEVO','NOTEBOOK'),(8,'Fuente de Poder 500W','RAM',8,'NUEVO','PC'),(9,'Disco SSD 480GB SATA','RAM',25,'NUEVO','PC'),(10,'Ventilador CPU 120mm','RAM',12,'NUEVO','PC'),(11,'Pasta Térmica Pro','RAM',30,'NUEVO','PC'),(12,'Cable Poder Trébol','RAM',50,'NUEVO','PC'),(13,'Tóner Negro HP 85A','RAM',10,'NUEVO','IMPRESORA'),(14,'Tóner Cian Epson','RAM',6,'NUEVO','IMPRESORA'),(15,'Tóner Magenta Epson','RAM',6,'NUEVO','IMPRESORA'),(16,'Tóner Amarillo Epson','RAM',6,'NUEVO','IMPRESORA'),(17,'Kit de Rodillos de Arrastre','RAM',4,'NUEVO','IMPRESORA'),(18,'Cable USB Impresora 1.8m','RAM',20,'NUEVO','IMPRESORA');
+INSERT INTO `repuestos` VALUES (1,'Memoria RAM 8GB DDR4','RAM',9,'NUEVO','NOTEBOOK'),(2,'Disco SSD 480GB','DISCO_DURO',5,'NUEVO','PC'),(3,'Tóner Negro HP','TONER',3,'NUEVO','IMPRESORA'),(4,'Batería Notebook Universal','RAM',9,'NUEVO','NOTEBOOK'),(5,'Cargador Notebook 19V','RAM',15,'NUEVO','NOTEBOOK'),(6,'Teclado Notebook Español','RAM',5,'NUEVO','NOTEBOOK'),(7,'Módulo RAM 8GB DDR4 Laptop','RAM',20,'NUEVO','NOTEBOOK'),(8,'Fuente de Poder 500W','FUENTE_PODER',8,'NUEVO','PC'),(9,'Disco SSD 480GB SATA','DISCO_DURO',25,'NUEVO','PC'),(10,'Ventilador CPU 120mm','PERIFERICO',12,'NUEVO','PC'),(11,'Pasta Térmica Pro','PERIFERICO',30,'NUEVO','PC'),(12,'Cable Poder Trébol','PERIFERICO',50,'NUEVO','PC'),(13,'Tóner Negro HP 85A','TONER',10,'NUEVO','IMPRESORA'),(14,'Tóner Cian Epson','TONER',6,'NUEVO','IMPRESORA'),(15,'Tóner Magenta Epson','TONER',6,'NUEVO','IMPRESORA'),(16,'Tóner Amarillo Epson','TONER',6,'NUEVO','IMPRESORA'),(17,'Kit de Rodillos de Arrastre','PERIFERICO',4,'NUEVO','IMPRESORA'),(18,'Cable USB Impresora 1.8m','PERIFERICO',20,'NUEVO','IMPRESORA');
 /*!40000 ALTER TABLE `repuestos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -218,7 +218,7 @@ CREATE TABLE `uso_repuestos_ti` (
   KEY `id_repuesto` (`id_repuesto`),
   CONSTRAINT `uso_repuestos_ti_ibfk_1` FOREIGN KEY (`id_mantencion`) REFERENCES `mantencion_ti` (`id_mantencion`),
   CONSTRAINT `uso_repuestos_ti_ibfk_2` FOREIGN KEY (`id_repuesto`) REFERENCES `repuestos` (`id_repuesto`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -227,6 +227,7 @@ CREATE TABLE `uso_repuestos_ti` (
 
 LOCK TABLES `uso_repuestos_ti` WRITE;
 /*!40000 ALTER TABLE `uso_repuestos_ti` DISABLE KEYS */;
+INSERT INTO `uso_repuestos_ti` VALUES (1,1,1,1),(2,3,4,1);
 /*!40000 ALTER TABLE `uso_repuestos_ti` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -258,6 +259,10 @@ LOCK TABLES `usuario` WRITE;
 INSERT INTO `usuario` VALUES (1,'19471598-6','Daniela','Montecinos','1947','ADMIN'),(2,'18897826-6','Alexandra','Ticona','1889','MANTENCION'),(3,'20505764-1','Javiera','Manquez','2050','SOPORTE_TI'),(4,'15046158-8','Mauricio','Fernandez','1504','CONDUCTOR');
 /*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Dumping routines for database 'db_hirata'
+--
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -268,4 +273,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-05-03 18:39:36
+-- Dump completed on 2026-05-16 22:25:44
